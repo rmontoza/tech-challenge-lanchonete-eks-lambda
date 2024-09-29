@@ -78,8 +78,8 @@ exports.handler = async (event) => {
             statusCode: 200,
             body: JSON.stringify({
                 accessToken: authResponse.AuthenticationResult.AccessToken,
-                idToken: authResponse.AuthenticationResult.IdToken,
-                refreshToken: authResponse.AuthenticationResult.RefreshToken,
+                //idToken: authResponse.AuthenticationResult.IdToken,
+                //refreshToken: authResponse.AuthenticationResult.RefreshToken,
                 expiresIn: authResponse.AuthenticationResult.ExpiresIn
             }),
             headers: {
