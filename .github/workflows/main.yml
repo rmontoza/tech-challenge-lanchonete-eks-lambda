@@ -1,0 +1,45 @@
+name: Deploy Lambda to AWS
+
+on:
+  push:
+    branches:
+      - main  # Dispara o deploy quando houver push na branch "main"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Checar o código do repositório
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Versão do Node.js compatível com a Lambda
+
+      # Passo 3: Instalar dependências do projeto
+      - name: Install dependencies
+        run: npm install
+
+      # Passo 4: Empacotar a Lambda
+      - name: Zip the Lambda function
+        run: zip -r function.zip .  # Empacota o código-fonte e dependências em um arquivo zip
+
+      # Passo 5: Configurar credenciais da AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Região da sua Lambda
+
+      # Passo 6: Fazer o deploy da Lambda
+      - name: Deploy Lambda function
+        run: |
+          aws lambda update-function-code \
+            --function-name func-cognito-ms-lanchonete \
+            --zip-file fileb://function.zip \
+            --publish
