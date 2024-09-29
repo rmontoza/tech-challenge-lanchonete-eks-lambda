@@ -16,7 +16,6 @@ function generateSecretHash(username, clientId, clientSecret) {
 }
 
 exports.handler = async (event) => {
-    // Verifica se é uma requisição POST e se tem o body
 
     const method = event.requestContext?.http?.method;
 
@@ -35,7 +34,7 @@ exports.handler = async (event) => {
 
     let body;
     try {
-        body = JSON.parse(event.body);  // O API Gateway envia o body como string
+        body = JSON.parse(event.body); 
     } catch (error) {
         return {
             statusCode: 400,
@@ -66,14 +65,12 @@ exports.handler = async (event) => {
             AuthParameters: {
                 USERNAME: document,
                 PASSWORD: "L75svw@90",
-                //SECRET_HASH: generateSecretHash(document, CLIENT_ID, CLIENT_SECRET) // Opcional: adicione se necessário
             }
         };
 
         // Chama o Cognito para autenticar o usuário
         const authResponse = await cognito.adminInitiateAuth(authParams).promise();
 
-        // Retorna o token de autenticação
         return {
             statusCode: 200,
             body: JSON.stringify({
